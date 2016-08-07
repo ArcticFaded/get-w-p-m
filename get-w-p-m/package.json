@@ -1,0 +1,19 @@
+{
+  "name": "get-w-p-m",
+  "main": "./lib/get-w-p-m",
+  "version": "0.0.0",
+  "description": "A short description of your package",
+  "keywords": [],
+  "dependencies": {
+    "atom-space-pen-views": "^2.2.0",
+    "jquery": "^3.1.0"
+  },
+  "activationCommands": {
+    "atom-workspace": "get-w-p-m:toggle"
+  },
+  "repository": "https://github.com/atom/get-w-p-m",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  }
+}

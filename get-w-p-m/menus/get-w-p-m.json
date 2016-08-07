@@ -1,0 +1,26 @@
+{
+  "context-menu": {
+    "atom-text-editor": [
+      {
+        "label": "Toggle get-w-p-m",
+        "command": "get-w-p-m:toggle"
+      }
+    ]
+  },
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "get-w-p-m",
+          "submenu": [
+            {
+              "label": "Toggle",
+              "command": "get-w-p-m:toggle"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

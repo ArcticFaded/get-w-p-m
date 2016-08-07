@@ -10,71 +10,95 @@ export default {
   subscriptions: null,
 
   activate(state) {
+    var tempos = [];
+    var settings = {
+       "async": true,
+       "crossDomain": true,
+       "url": "https://api.spotify.com/v1/users/spotify/playlists/2qlMTcW6AnnaGl7eXWAZP5/tracks",
+       "method": "GET",
+       "headers": {
+       "authorization": "Bearer BQA2c3L6yICQMNAOQTrflaG5phkd0pZB5xnnSQiz9NMhwctloISqkIAnScEO0DmOfCfSMSQEtTshzh7HuvppqmpHsHwj7TUEOmSe5KON3UWE2_aoc9bCLkOKWdZ77oL8y4ta94EXWF_202BmrZdLcxBUx1VpGj6VSBKv6bEu37KvPDDDb9EFrlAwiQ",
+       "cache-control": "no-cache",
+       "postman-token": "dde728fd-2680-3d2a-f910-0d4253399923"
+     }
+   }
+
+   require('atom-space-pen-views').$.ajax(settings).done(function (response) {
+     console.log(response);
+     for (tracks in response['items']){
+
+       var tempo = {
+         "async": true,
+         "crossDomain": true,
+         "url": "https://api.spotify.com/v1/audio-features/" + response['items'][tracks]['track']['id'] + "",
+         "method": "GET",
+         "headers": {
+           "authorization": "Bearer BQA2c3L6yICQMNAOQTrflaG5phkd0pZB5xnnSQiz9NMhwctloISqkIAnScEO0DmOfCfSMSQEtTshzh7HuvppqmpHsHwj7TUEOmSe5KON3UWE2_aoc9bCLkOKWdZ77oL8y4ta94EXWF_202BmrZdLcxBUx1VpGj6VSBKv6bEu37KvPDDDb9EFrlAwiQ",
+           "cache-control": "no-cache",
+           "postman-token": "dde728fd-2680-3d2a-f910-0d4253399923"
+         }
+       }
+       require('atom-space-pen-views').$.ajax(tempo).done(function (response) {
+         var song = [response['tempo'], response['uri']];
+         tempos.push(song);
+       });
+     }
+   });
+
     this.getWPMView = new GetWPMView(state.getWPMViewState);
     this.modalPanel = atom.workspace.addModalPanel({
       item: this.getWPMView.getElement(),
       visible: false
     });
     curTime = Date.now();
+    var accu = 0;
     editor = atom.workspace.getActiveTextEditor();
     editor.getBuffer().onDidStopChanging( function(e){
      if(e){
-       console.log(e + " " + (Date.now() - curTime)/1000);
-
+       console.log(e['changes'][0]['newText'] + " " + (Date.now() - curTime)/1000);
+       accu += e['changes'][0]['newText'].length;
      }
-     var settings = {
- "async": true,
- "crossDomain": true,
- "url": "https://api.spotify.com/v1/users/spotify/playlists/2qlMTcW6AnnaGl7eXWAZP5/tracks",
- "method": "GET",
- "headers": {
-   "authorization": "Bearer BQBWxx-NwzyIZwfwu6eTNfNYLWZsr0vKPVmaHT6vOCbaivb7wWPWyOorCKHX8ctfTRYecAyoNcHlOjfwANNthOccfMvspz8Gpds1zZZzAXJ1w90RugoNEnR1HSAGTDmh6wmwFL5xRN7wNPsF4nIlGKaQjfd78TL4LQseka7afLmFglyZSvIXW4VpuQ",
-   "cache-control": "no-cache",
-   "postman-token": "dde728fd-2680-3d2a-f910-0d4253399923"
- }
-}
-
-
- var ids = []
- require('atom-space-pen-views').$.ajax(settings).done(function (response) {
- console.log(response);
- for (tracks in response['items']){
-   ids[tracks] = response['items'][tracks]['track']['id'] + "";
- }
-});
-  console.log(ids);
-  console.log(ids.join(","));
-  var tempo = {
-    "async": true,
-    "crossDomain": true,
-    "url": "https://api.spotify.com/v1/audio-features/?ids=" + ids.map(function(a){
-      return a;
-    }).join(","),
-    "method": "GET",
-    "headers": {
-      "authorization": "Bearer BQBWxx-NwzyIZwfwu6eTNfNYLWZsr0vKPVmaHT6vOCbaivb7wWPWyOorCKHX8ctfTRYecAyoNcHlOjfwANNthOccfMvspz8Gpds1zZZzAXJ1w90RugoNEnR1HSAGTDmh6wmwFL5xRN7wNPsF4nIlGKaQjfd78TL4LQseka7afLmFglyZSvIXW4VpuQ",
-      "cache-control": "no-cache",
-      "postman-token": "dde728fd-2680-3d2a-f910-0d4253399923"
-    }
-  }
-  require('atom-space-pen-views').$.ajax(tempo).done(function (response) {
-  console.log(response);
- });
-
-
-     /*var data = `{
-  "ContentItem": {
-    "source": "SPOTIFY",
-    "type": "uri",
-    "location": `+ track + `,
-    "sourceAccount": "bosehack6"
-  }
-}`;
+     /*v
 
      require('atom-space-pen-views').$.ajax({ type: "POST", url: 'http://192.168.43.150:8090/select', contentType: 'application/json', data: data, success: function(data) { console.log(data); } })
 */
      if((Date.now() - curTime)/1000 > 30){
+       for (x in tempos){
+         for(y in tempos){
+           if(tempos[y][0] < tempos[x][0]){
+             var tem = tempos[y];
+             tempos[y] = tempos[x];
+             tempos[x] = tem;
+           }
+         }
+       }
+       console.log(tempos);
+       console.log(accu);
+       if(accu > 182)
+        accu = 182;
+       else if(accu < 75)
+        accu = 75;
        curTime = Date.now();
+       for(index in tempos){
+         if(accu > tempos[index][0]){
+           var data = `{
+             "ContentItem": {
+               "source": "SPOTIFY",
+               "type": "uri",
+               "location": \"`+ tempos[index][1] + `\",
+               "sourceAccount": "bosehack6"
+             }
+           }`;
+           console.log(index)
+           console.log(tempos[index][1]);
+           require('atom-space-pen-views').$.ajax({ type: "POST", url: 'http://192.168.43.150:8090/select', contentType: 'application/json', data: data, success: function(data) { console.log(data); } });
+           accu = 0;
+           break;
+         }
+         else {
+           continue;
+         }
+       }
      }
     });
 

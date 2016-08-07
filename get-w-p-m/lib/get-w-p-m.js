@@ -17,7 +17,7 @@ export default {
        "url": "https://api.spotify.com/v1/users/spotify/playlists/2qlMTcW6AnnaGl7eXWAZP5/tracks",
        "method": "GET",
        "headers": {
-       "authorization": "Bearer BQA2c3L6yICQMNAOQTrflaG5phkd0pZB5xnnSQiz9NMhwctloISqkIAnScEO0DmOfCfSMSQEtTshzh7HuvppqmpHsHwj7TUEOmSe5KON3UWE2_aoc9bCLkOKWdZ77oL8y4ta94EXWF_202BmrZdLcxBUx1VpGj6VSBKv6bEu37KvPDDDb9EFrlAwiQ",
+       "authorization": "Bearer BQCrqB4VHtMRAwlFb2stoSiD3m3UmgnZ2ejpm3yxyDzmVN_9ixgFqBaxnWEabkDZI8D2NDwetVDmjaWclF-D7rrIoIIVCgxR3qFlPypHgeN9C7SuNYQQ9AkvxVSQetGNr1Rwg4xduQYuELZW9ZiGjM-VsRwZKiOYRiaRVBIZxtmNDlA-Og9pUH544g",
        "cache-control": "no-cache",
        "postman-token": "dde728fd-2680-3d2a-f910-0d4253399923"
      }
@@ -33,7 +33,7 @@ export default {
          "url": "https://api.spotify.com/v1/audio-features/" + response['items'][tracks]['track']['id'] + "",
          "method": "GET",
          "headers": {
-           "authorization": "Bearer BQA2c3L6yICQMNAOQTrflaG5phkd0pZB5xnnSQiz9NMhwctloISqkIAnScEO0DmOfCfSMSQEtTshzh7HuvppqmpHsHwj7TUEOmSe5KON3UWE2_aoc9bCLkOKWdZ77oL8y4ta94EXWF_202BmrZdLcxBUx1VpGj6VSBKv6bEu37KvPDDDb9EFrlAwiQ",
+           "authorization": "Bearer BQCrqB4VHtMRAwlFb2stoSiD3m3UmgnZ2ejpm3yxyDzmVN_9ixgFqBaxnWEabkDZI8D2NDwetVDmjaWclF-D7rrIoIIVCgxR3qFlPypHgeN9C7SuNYQQ9AkvxVSQetGNr1Rwg4xduQYuELZW9ZiGjM-VsRwZKiOYRiaRVBIZxtmNDlA-Og9pUH544g",
            "cache-control": "no-cache",
            "postman-token": "dde728fd-2680-3d2a-f910-0d4253399923"
          }
@@ -75,9 +75,9 @@ export default {
        console.log(tempos);
        console.log(accu);
        if(accu > 182)
-        accu = 182;
+        accu = Math.floor((Math.random() * 107) + 75);
        else if(accu < 75)
-        accu = 75;
+        accu = Math.floor((Math.random() * 107) + 75);
        curTime = Date.now();
        for(index in tempos){
          if(accu > tempos[index][0]){
